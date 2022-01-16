@@ -1,8 +1,11 @@
 package study;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class StringTest {
     @Test
@@ -29,5 +32,32 @@ public class StringTest {
         String actual = givenValue.substring(1,givenValue.length()-1);
         //then
         assertThat(actual).isEqualTo("1,2");
+    }
+
+    @Test
+    @DisplayName("문자열에서 특정 인덱스 위치의 문자를 가져오기 성공")
+    public void charAtTest() throws Exception {
+        //given
+        String givenValue = "abc";
+        //when
+        char actual = givenValue.charAt(0);
+        //then
+        assertThat(actual).isEqualTo('a');
+    }
+
+    @Test
+    @DisplayName("문자열에서 벗어난 인덱스 위치 입력시 StringIndexOutOfBoundsException 발생")
+    public void charAtExceptionTest() throws Exception {
+        //given
+        String givenValue = "abc";
+        //when
+        //then
+        assertThatThrownBy(() -> {
+            char actual = givenValue.charAt(givenValue.length());
+        }).isInstanceOf(StringIndexOutOfBoundsException.class);
+        assertThatExceptionOfType(StringIndexOutOfBoundsException.class)
+            .isThrownBy(() -> {
+                char actual = givenValue.charAt(givenValue.length());
+            });
     }
 }
