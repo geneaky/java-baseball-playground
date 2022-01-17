@@ -7,6 +7,8 @@ import java.util.Set;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class SetTest {
   private Set<Integer> numbers;
@@ -22,8 +24,13 @@ public class SetTest {
 
 
   @Test
-  public void set_크기_구하는_메서드_테스트_성공() throws Exception {
-
+  public void set_크기_구하는_메서드_테스트() throws Exception {
     assertThat(numbers.size()).isEqualTo(3);
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = {1,2,3})
+  public void set_내용_정확히_일치_테스트(int value) throws Exception {
+    assertThat(numbers.contains(value)).isTrue();
   }
 }
