@@ -31,4 +31,15 @@ public class StringCalculatorTest {
       //then
       assertThat(number).isEqualTo(2);
   }
+
+  @Test
+  public void 문자열_배열로_저장() throws Exception {
+      //given
+      String input = "2 + 2";
+      String[] inputs = input.split(" ");
+      //when
+      //then
+      assertThat(inputs.length).isEqualTo(3);
+      assertThat(inputs).containsExactly("2","+","2");
+  }
 }
