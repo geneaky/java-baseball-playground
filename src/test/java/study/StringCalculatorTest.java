@@ -42,4 +42,29 @@ public class StringCalculatorTest {
       assertThat(inputs.length).isEqualTo(3);
       assertThat(inputs).containsExactly("2","+","2");
   }
+
+  @Test
+  public void 문자열_배열에서_문자와_연산자를_구분() throws Exception {
+    //given
+    String input = "2 +";
+    String[] inputs = input.split(" ");
+    //when
+    //then
+    for(String value : inputs) {
+      if (isNumeric(value)){
+        assertThat(Integer.parseInt(value)).isInstanceOf(Integer.class);
+        continue;
+      }
+      assertThat(value).isInstanceOf(String.class);
+    }
+  }
+
+  private boolean isNumeric(String value) {
+    try {
+      Integer.parseInt(value);
+    } catch (NumberFormatException e) {
+      return false;
+    }
+    return true;
+  }
 }
