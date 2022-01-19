@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class StringCalculatorTest {
 
@@ -17,6 +19,8 @@ public class StringCalculatorTest {
   * 즉, 수학에서는 곱셈, 나눗셈이 덧셈, 뺄셈 보다 먼저 계산해야 하지만 이를 무시한다.
   * 예를 들어 "2 + 3 * 4 / 2"와 같은 문자열을 입력할 경우 2 + 3 * 4 / 2 실행 결과인 10을 출력해야 한다.
   */
+
+  StringCalculator calculator = new StringCalculator();
 
   @Test
   public void nothing() throws Exception {
@@ -66,5 +70,19 @@ public class StringCalculatorTest {
       return false;
     }
     return true;
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"2 + 2","3 - 1","4 / 2","5 * 1"})
+  public void 연산자_한_개_연산(String value) throws Exception {
+    //given
+    String[] inputs = value.split(" ");
+    for (String input : inputs) {
+      if (isNumeric(input)) {
+
+      }
+    }
+    //when
+    //then
   }
 }
