@@ -5,10 +5,13 @@ import static org.assertj.core.api.Assertions.*;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 public class StringCalculatorTest {
@@ -73,16 +76,40 @@ public class StringCalculatorTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"2 + 2","3 - 1","4 / 2","5 * 1"})
-  public void 연산자_한_개_연산(String value) throws Exception {
+  @CsvSource(value = {"2 + 2 : 4","3 - 1 : 2","4 / 2 : 2","5 * 1 : 5"},delimiter = ':')
+  public void 연산자_한_개_연산(String problem, String answer) throws Exception {
     //given
-    String[] inputs = value.split(" ");
-    for (String input : inputs) {
-      if (isNumeric(input)) {
+    String[] inputs = problem.split(" ");
+    Integer firstNumber = Integer.parseInt(inputs[0]);
+    Integer secondNumber = Integer.parseInt(inputs[2]);
 
-      }
-    }
+    Integer actual = 0;
+
+    actual = getActual(inputs, firstNumber, secondNumber, actual);
+
     //when
     //then
+    Integer result = Integer.parseInt(answer);
+    assertThat(actual).isEqualTo(result);
+  }
+
+  private Integer getActual(String[] inputs, Integer firstNumber, Integer secondNumber,
+      Integer actual) {
+    if(inputs[1].equals("+")) {
+      actual = firstNumber + secondNumber;
+    }
+
+    if(inputs[1].equals("-")) {
+      actual = firstNumber - secondNumber;
+    }
+
+    if(inputs[1].equals("*")) {
+      actual = firstNumber * secondNumber;
+    }
+
+    if(inputs[1].equals("/")) {
+      actual = firstNumber / secondNumber;
+    }
+    return actual;
   }
 }
