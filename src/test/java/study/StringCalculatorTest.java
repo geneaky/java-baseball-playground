@@ -2,17 +2,11 @@ package study;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import org.assertj.core.api.Assertions;
+import java.util.LinkedList;
+import java.util.Queue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 public class StringCalculatorTest {
 
@@ -83,9 +77,7 @@ public class StringCalculatorTest {
     Integer firstNumber = Integer.parseInt(inputs[0]);
     Integer secondNumber = Integer.parseInt(inputs[2]);
 
-    Integer actual = 0;
-
-    actual = getActual(inputs, firstNumber, secondNumber, actual);
+    Integer actual = getActual(inputs[1], firstNumber, secondNumber);
 
     //when
     //then
@@ -93,23 +85,56 @@ public class StringCalculatorTest {
     assertThat(actual).isEqualTo(result);
   }
 
-  private Integer getActual(String[] inputs, Integer firstNumber, Integer secondNumber,
-      Integer actual) {
-    if(inputs[1].equals("+")) {
-      actual = firstNumber + secondNumber;
+  private Integer getActual(String operation, Integer firstNumber, Integer secondNumber) {
+    if(operation.equals("+")) {
+      return firstNumber + secondNumber;
     }
 
-    if(inputs[1].equals("-")) {
-      actual = firstNumber - secondNumber;
+    if(operation.equals("-")) {
+      return firstNumber - secondNumber;
     }
 
-    if(inputs[1].equals("*")) {
-      actual = firstNumber * secondNumber;
+    if(operation.equals("*")) {
+      return firstNumber * secondNumber;
     }
 
-    if(inputs[1].equals("/")) {
-      actual = firstNumber / secondNumber;
+    if(operation.equals("/")) {
+      return firstNumber / secondNumber;
     }
-    return actual;
+
+    return null;
+  }
+
+  @Test
+  public void 연산자_두_개_연산() throws Exception {
+    //given
+    String input = "2 + 2 * 3";
+    //when
+    String[] inputs = input.split(" ");
+    Queue<Integer> numbers = new LinkedList<>();
+    Queue<String> operations = new LinkedList<>();
+
+    initializeNumbersAndOperations(inputs, numbers, operations);
+
+    Integer actual = getActual(operations.poll(),numbers.poll(),numbers.poll());
+    while(!numbers.isEmpty()) {
+      actual = getActual(operations.poll(), actual, numbers.poll());
+    }
+    //then
+    assertThat(actual).isEqualTo(12);
+  }
+
+  private void initializeNumbersAndOperations(String[] inputs, Queue<Integer> numbers, Queue<String> operations) {
+    for(String value : inputs) {
+      specifyNumberAndOperation(numbers, operations, value);
+    }
+  }
+
+  private void specifyNumberAndOperation(Queue<Integer> numbers, Queue<String> operations, String value) {
+    if (isNumeric(value)) {
+      numbers.add(Integer.parseInt(value));
+      return;
+    }
+    operations.offer(value);
   }
 }
