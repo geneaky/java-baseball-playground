@@ -53,11 +53,11 @@ public class StringTest {
         //when
         //then
         assertThatThrownBy(() -> {
-            givenValue.charAt(givenValue.length());
+            char actual = givenValue.charAt(givenValue.length());
         }).isInstanceOf(StringIndexOutOfBoundsException.class);
         assertThatExceptionOfType(StringIndexOutOfBoundsException.class)
             .isThrownBy(() -> {
-                givenValue.charAt(givenValue.length());
+                char actual = givenValue.charAt(givenValue.length());
             });
     }
 }
