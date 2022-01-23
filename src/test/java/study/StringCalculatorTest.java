@@ -4,9 +4,11 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class StringCalculatorTest {
 
@@ -24,117 +26,40 @@ public class StringCalculatorTest {
   }
 
   @Test
-  public void 문자_한개_숫자로_변환() throws Exception {
-      //given
-      String input = "2";
-      //when
-      int number = Integer.parseInt(input);
-      //then
-      assertThat(number).isEqualTo(2);
-  }
-
-  @Test
-  public void 문자열_배열로_저장() throws Exception {
-      //given
-      String input = "2 + 2";
-      String[] inputs = input.split(" ");
-      //when
-      //then
-      assertThat(inputs.length).isEqualTo(3);
-      assertThat(inputs).containsExactly("2","+","2");
-  }
-
-  @Test
-  public void 문자열_배열에서_문자와_연산자를_구분() throws Exception {
+  public void 숫자_문자_하나_입력() throws Exception {
     //given
-    String input = "2 +";
-    String[] inputs = input.split(" ");
+    String value = "2";
+    //when
+    int result = calculator.calculate(value);
+    //then
+    assertThat(result).isEqualTo(2);
+  }
+
+  @Test
+  public void 연산자_문자_하나_입력() throws Exception {
+    //given
+    String value = "+";
     //when
     //then
-    for(String value : inputs) {
-      if (isNumeric(value)){
-        assertThat(Integer.parseInt(value)).isInstanceOf(Integer.class);
-        continue;
-      }
-      assertThat(value).isInstanceOf(String.class);
-    }
-  }
-
-  private boolean isNumeric(String value) {
-    try {
-      Integer.parseInt(value);
-    } catch (NumberFormatException e) {
-      return false;
-    }
-    return true;
+    assertThatThrownBy(() -> {calculator.calculate(value);}).isInstanceOf(IllegalArgumentException.class);
   }
 
   @ParameterizedTest
-  @CsvSource(value = {"2 + 2 : 4","3 - 1 : 2","4 / 2 : 2","5 * 1 : 5"},delimiter = ':')
-  public void 연산자_한_개_연산(String problem, String answer) throws Exception {
+  @ValueSource( strings = {"2 2","2 +"})
+  public void 문자_두개_입력(String value) throws Exception {
     //given
-    String[] inputs = problem.split(" ");
-    Integer firstNumber = Integer.parseInt(inputs[0]);
-    Integer secondNumber = Integer.parseInt(inputs[2]);
-
-    Integer actual = getActual(inputs[1], firstNumber, secondNumber);
-
     //when
     //then
-    Integer result = Integer.parseInt(answer);
-    assertThat(actual).isEqualTo(result);
-  }
-
-  private Integer getActual(String operation, Integer firstNumber, Integer secondNumber) {
-    if(operation.equals("+")) {
-      return firstNumber + secondNumber;
-    }
-
-    if(operation.equals("-")) {
-      return firstNumber - secondNumber;
-    }
-
-    if(operation.equals("*")) {
-      return firstNumber * secondNumber;
-    }
-
-    if(operation.equals("/")) {
-      return firstNumber / secondNumber;
-    }
-
-    return null;
+    assertThatThrownBy(() -> {calculator.calculate(value);}).isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
-  public void 연산자_두_개_연산() throws Exception {
+  public void 숫자_문자_두개_더하기() throws Exception {
     //given
-    String input = "2 + 2 * 3";
+    String value = "2 + 2";
     //when
-    String[] inputs = input.split(" ");
-    Queue<Integer> numbers = new LinkedList<>();
-    Queue<String> operations = new LinkedList<>();
-
-    initializeNumbersAndOperations(inputs, numbers, operations);
-
-    Integer actual = getActual(operations.poll(),numbers.poll(),numbers.poll());
-    while(!numbers.isEmpty()) {
-      actual = getActual(operations.poll(), actual, numbers.poll());
-    }
+    int result = calculator.calculate(value);
     //then
-    assertThat(actual).isEqualTo(12);
-  }
-
-  private void initializeNumbersAndOperations(String[] inputs, Queue<Integer> numbers, Queue<String> operations) {
-    for(String value : inputs) {
-      specifyNumberAndOperation(numbers, operations, value);
-    }
-  }
-
-  private void specifyNumberAndOperation(Queue<Integer> numbers, Queue<String> operations, String value) {
-    if (isNumeric(value)) {
-      numbers.add(Integer.parseInt(value));
-      return;
-    }
-    operations.offer(value);
+    assertThat(result).isEqualTo(4);
   }
 }
