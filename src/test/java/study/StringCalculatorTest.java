@@ -63,6 +63,24 @@ public class StringCalculatorTest {
   }
 
   @Test
+  public void 연산자로_끝나는_길이_3의_문자열() throws Exception {
+    //given
+    String value = "2 2 +";
+    //when
+    //then
+    assertThatThrownBy(() -> {calculator.calculate(value);}).isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  public void 연산자가_문자보다_많은_문자열() throws Exception {
+    //given
+    String value = "2 + + + 3";
+    //when
+    //then
+    assertThatThrownBy(() -> {calculator.calculate(value);}).isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
   public void 숫자_문자_두개_더하기() throws Exception {
     //given
     String value = "2 + 2";

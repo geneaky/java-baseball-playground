@@ -1,5 +1,6 @@
 package study;
 
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -10,42 +11,47 @@ public class StringCalculator {
   public int calculate(String stringFormula) {
     String[] values = stringFormula.split(" ");
 
-    if (stringValidator.valid(stringFormula) != null) {
-      return stringValidator.valid(stringFormula);
+    if (stringValidator.validString(stringFormula) != null) {
+      return stringValidator.validString(stringFormula);
     }
 
-    Queue<Integer> numbers = new LinkedList<>();
+    Deque<Integer> numbers = new LinkedList<>();
     Queue<String> operations = new LinkedList<>();
 
     distinguishNumberAndOperation(values, numbers, operations);
 
+    stringValidator.validNumbersAndOperations(numbers,operations);
+
     int result = 0;
     int size = operations.size();
+
     for ( int i = 0; i < size; i++ ) {
-      result = operate(numbers, operations, result);
+      result = operate(numbers, operations);
+      numbers.addFirst(result);
     }
 
     return result;
   }
 
-  private int operate(Queue<Integer> numbers, Queue<String> operations, int result) {
+  private int operate(Deque<Integer> numbers, Queue<String> operations) {
     int x = numbers.poll();
     int y= numbers.poll();
     String operation = operations.poll();
 
-    if ( operation.equals("+")) {
-      result += (x + y);
+    if (operation.equals("+")) {
+      return (x + y);
     }
-    return result;
+
+    return 0;
   }
 
-  private void distinguishNumberAndOperation(String[] values, Queue<Integer> numbers, Queue<String> operations) {
+  private void distinguishNumberAndOperation(String[] values, Deque<Integer> numbers, Queue<String> operations) {
     for(String value : values) {
       distinguish(numbers, operations, value);
     }
   }
 
-  private void distinguish(Queue<Integer> numbers, Queue<String> operations, String value) {
+  private void distinguish(Deque<Integer> numbers, Queue<String> operations, String value) {
     if (stringValidator.isNumeric(value)) {
       numbers.offer(Integer.parseInt(value));
       return;
