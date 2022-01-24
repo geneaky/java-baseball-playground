@@ -45,9 +45,18 @@ public class StringCalculatorTest {
   }
 
   @ParameterizedTest
-  @ValueSource( strings = {"2 2","2 +"})
+  @ValueSource( strings = {"2 2","2 +","+ 2"})
   public void 문자_두개_입력(String value) throws Exception {
     //given
+    //when
+    //then
+    assertThatThrownBy(() -> {calculator.calculate(value);}).isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  public void 연산자로_시작하는_길이_3의_문자열() throws Exception {
+    //given
+    String value = "+ 2 2";
     //when
     //then
     assertThatThrownBy(() -> {calculator.calculate(value);}).isInstanceOf(IllegalArgumentException.class);
@@ -61,5 +70,15 @@ public class StringCalculatorTest {
     int result = calculator.calculate(value);
     //then
     assertThat(result).isEqualTo(4);
+  }
+
+  @Test
+  public void 숫자_문자_세개_더하기() throws Exception {
+    //given
+    String value = "2 + 3 + 4";
+    //when
+    int result = calculator.calculate(value);
+    //then
+    assertThat(result).isEqualTo(9);
   }
 }

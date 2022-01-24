@@ -1,31 +1,17 @@
 package study;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 public class StringCalculator {
 
-
-  private boolean isNumeric(String value) {
-    try {
-      Integer.parseInt(value);
-    } catch (NumberFormatException e) {
-      return false;
-    }
-    return true;
-  }
+  StringValidator stringValidator = new StringValidator();
 
   public int calculate(String stringFormula) {
     String[] values = stringFormula.split(" ");
 
-    if (values.length == 1) {
-      return verifyStringFormula(stringFormula);
-    }
-
-    if (values.length % 3 != 0) {
-      throw new IllegalArgumentException();
+    if (stringValidator.valid(stringFormula) != null) {
+      return stringValidator.valid(stringFormula);
     }
 
     Queue<Integer> numbers = new LinkedList<>();
@@ -40,13 +26,6 @@ public class StringCalculator {
     }
 
     return result;
-  }
-
-  private int verifyStringFormula(String stringFormula) {
-    if(isNumeric(stringFormula)) {
-      return Integer.parseInt(stringFormula);
-    }
-    throw new IllegalArgumentException();
   }
 
   private int operate(Queue<Integer> numbers, Queue<String> operations, int result) {
@@ -67,7 +46,7 @@ public class StringCalculator {
   }
 
   private void distinguish(Queue<Integer> numbers, Queue<String> operations, String value) {
-    if (isNumeric(value)) {
+    if (stringValidator.isNumeric(value)) {
       numbers.offer(Integer.parseInt(value));
       return;
     }
