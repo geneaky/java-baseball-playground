@@ -38,7 +38,7 @@ public class StringValidator {
   }
 
   public void validNumbersAndOperations(Deque<Integer> numbers, Queue<String> operations) {
-    if(operations.size() >= numbers.size()) {
+    if((numbers.size() - operations.size()) != 1) {
       throw new IllegalArgumentException();
     }
   }

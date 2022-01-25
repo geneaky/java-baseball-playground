@@ -30,9 +30,8 @@ public class StringCalculatorTest {
     //given
     String value = "2";
     //when
-    int result = calculator.calculate(value);
     //then
-    assertThat(result).isEqualTo(2);
+    assertThat(calculator.calculate(value)).isEqualTo(2);
   }
 
   @Test
@@ -81,13 +80,30 @@ public class StringCalculatorTest {
   }
 
   @Test
+  public void 숫자만_두_개_입력_문자열() throws Exception {
+    //given
+    String value = "2 2";
+    //when
+    //then
+    assertThatThrownBy(() -> {calculator.calculate(value);}).isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  public void 숫자만_세_개_이상_입력_문자열() throws Exception {
+    //given
+    String value = "2 2 2 ";
+    //when
+    //then
+    assertThatThrownBy(() -> {calculator.calculate(value);}).isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
   public void 숫자_문자_두개_더하기() throws Exception {
     //given
     String value = "2 + 2";
     //when
-    int result = calculator.calculate(value);
     //then
-    assertThat(result).isEqualTo(4);
+    assertThat(calculator.calculate(value)).isEqualTo(4);
   }
 
   @Test
@@ -95,8 +111,112 @@ public class StringCalculatorTest {
     //given
     String value = "2 + 3 + 4";
     //when
-    int result = calculator.calculate(value);
     //then
-    assertThat(result).isEqualTo(9);
+    assertThat(calculator.calculate(value)).isEqualTo(9);
+  }
+
+  @Test
+  public void 숫자_두개_빼기() throws Exception {
+    //given
+    String value = "2 - 2";
+    //when
+    //then
+    assertThat(calculator.calculate(value)).isEqualTo(0);
+  }
+
+  @Test
+  public void 숫자_세_개_빼기() throws Exception {
+    //given
+    String value = "7 - 3 - 1";
+    //when
+    //then
+    assertThat(calculator.calculate(value)).isEqualTo(3);
+  }
+
+  @Test
+  public void 더하기_빼기_믹스() throws Exception {
+    //given
+    String value = "7 + 4 - 10";
+    //when
+    //then
+    assertThat(calculator.calculate(value)).isEqualTo(1);
+  }
+
+  @Test
+  public void 숫자_곱하기() throws Exception {
+    //given
+    String value = "7 * 3";
+    //when
+    //then
+    assertThat(calculator.calculate(value)).isEqualTo(21);
+  }
+
+  @Test
+  public void 숫자_3개_곱하기() throws Exception {
+    //given
+    String value = "1 * 3 * 7";
+    //when
+    //then
+    assertThat(calculator.calculate(value)).isEqualTo(21);
+  }
+
+  @Test
+  public void 숫자_곱하기_빼기_순서_혼합() throws Exception {
+    //given
+    String value = "7 - 3 * 4";
+    //when
+    //then
+    assertThat(calculator.calculate(value)).isEqualTo(16);
+  }
+
+  @Test
+  public void 숫자_나누기() throws Exception {
+    //given
+    String value = "16 / 4";
+    //when
+    //then
+    assertThat(calculator.calculate(value)).isEqualTo(4);
+  }
+
+  @Test
+  public void 숫자_3개_나누기() throws Exception {
+    //given
+    String value = "49 / 7 / 7";
+    //when
+    //then
+    assertThat(calculator.calculate(value)).isEqualTo(1);
+  }
+
+  @Test
+  public void 모든_연산자_순서_혼합() throws Exception {
+    //given
+    String value = "12 - 2 * 10 / 100 + 5";
+    //when
+    //then
+    assertThat(calculator.calculate(value)).isEqualTo(6);
+  }
+
+  @Test
+  public void 문자열_null_입력() throws Exception {
+    //given
+    //when
+    //then
+    assertThatThrownBy(() -> { calculator.calculate(null);}).isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  public void 문자열_blank() throws Exception {
+    //given
+    //when
+    //then
+    assertThatThrownBy(() -> { calculator.calculate("");}).isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  public void 문자열_space() throws Exception {
+    //given
+    //when
+    //then
+    assertThatThrownBy(() ->{ calculator.calculate(" ");}).isInstanceOf(IllegalArgumentException.class);
   }
 }

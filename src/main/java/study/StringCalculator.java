@@ -2,6 +2,7 @@ package study;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Queue;
 
 public class StringCalculator {
@@ -9,11 +10,13 @@ public class StringCalculator {
   StringValidator stringValidator = new StringValidator();
 
   public int calculate(String stringFormula) {
-    String[] values = stringFormula.split(" ");
+    Optional<String> optionalFormula = Optional.ofNullable(stringFormula);
+    optionalFormula.orElseThrow(() -> new IllegalArgumentException());
 
     if (stringValidator.validString(stringFormula) != null) {
       return stringValidator.validString(stringFormula);
     }
+    String[] values = stringFormula.split(" ");
 
     Deque<Integer> numbers = new LinkedList<>();
     Queue<String> operations = new LinkedList<>();
@@ -40,6 +43,15 @@ public class StringCalculator {
 
     if (operation.equals("+")) {
       return (x + y);
+    }
+    if (operation.equals("-")) {
+      return (x - y);
+    }
+    if (operation.equals("*")) {
+      return (x * y);
+    }
+    if (operation.equals("/")) {
+      return (x / y);
     }
 
     return 0;
